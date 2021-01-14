@@ -6,11 +6,21 @@
 /*   By: sgrondin <sgrondin@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 14:15:27 by sgrondin          #+#    #+#             */
-/*   Updated: 2021/01/14 16:39:55 by sgrondin         ###   ########.fr       */
+/*   Updated: 2021/01/14 17:39:32 by sgrondin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+int line_length(char *line)
+{
+    int i;
+
+    i = 0;
+    while (line[i] && line[i] != '\n')
+        i++;
+    return (i + 1);
+}
 
 int get_next_line(int fd, char **line)
 {
@@ -27,10 +37,10 @@ int get_next_line(int fd, char **line)
             total = ft_strjoin(total, buffer);
         else
             total = ft_strdup(buffer);
-        if (x < BUFFER_SIZE)
+        if (x < BUFFER_SIZE || ft_strchr(total, '\n'))
             break;
     }
-    *line = total;
+    ft_strlcpy(*line, total, line_length(total));
     return (1);
 }
 
