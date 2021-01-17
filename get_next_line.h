@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sgrondin <sgrondin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sg9031 <sg9031@gmail.com>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 14:36:14 by sgrondin          #+#    #+#             */
-/*   Updated: 2021/01/14 17:39:04 by sgrondin         ###   ########.fr       */
+/*   Updated: 2021/01/15 12:55:57 by sg9031           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <unistd.h>
 # include <stdlib.h>
 
+int 	get_next_line(int fd, char **line);
 char	*ft_strjoin(char const *s1, char const *s2);
 size_t	ft_strlen(const char *str);
 char	*ft_strdup(const char *src);
