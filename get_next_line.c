@@ -6,88 +6,95 @@
 /*   By: sg9031 <sg9031@gmail.com>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 14:15:27 by sgrondin          #+#    #+#             */
-/*   Updated: 2021/01/17 22:39:26 by sg9031           ###   ########.fr       */
+/*   Updated: 2021/01/17 23:58:35 by sg9031           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
 
-char *save_rem(char *total)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-    int i;
-    int start;
+	int		total_size;
+	char	*new_string;
+	int		i;
 
-    i = 0;
-    while (total[i] && total[i] != '\n')
-        i++;
-    start = i;
-    while (total[i])
-        i++;
-    if (i != start)
-        return ft_strdup(&total[start + 1]);
-    return (NULL);
+	if (!s1 || !s2)
+		return (NULL);
+	total_size = ft_strlen(s1) + ft_strlen(s2);
+	if (!(new_string = malloc(total_size + 1)))
+		return (NULL);
+	i = 0;
+	while (*s1)
+		new_string[i++] = *s1++;
+	while (*s2)
+		new_string[i++] = *s2++;
+	new_string[i] = '\0';
+	return (new_string);
 }
 
-int line_length(char *line)
+char	*save_rem(char *total)
 {
-    int i;
+	int i;
+	int start;
 
-    i = 0;
-    while (line[i] && line[i] != '\n')
-        i++;
-    return (i + 1);
+	i = 0;
+	while (total[i] && total[i] != '\n')
+		i++;
+	start = i;
+	while (total[i])
+		i++;
+	if (i != start)
+		return (ft_strdup(&total[start + 1]));
+	return (NULL);
 }
 
-int get_next_line(int fd, char **line)
+int		line_length(char *line)
 {
-    ssize_t x;
-    char buffer[BUFFER_SIZE + 1];
-    // size_t size = BUFFER_SIZE;
-    char *total = NULL;
-    static char *rem;
-    
-    if (BUFFER_SIZE == 0 || fd < 0 || !line)
-        return (-1);
-    if (rem)
-    {
-        total = ft_strdup(rem);
-        free(rem);
-        rem = NULL;
-    }
-    if (!total || !ft_strchr(total, '\n'))
-    {
-        x = 1;
-        while ((x = read(fd, buffer, BUFFER_SIZE)) > 0)
-        {
-            buffer[x] = '\0';
-            if (total)
-                total = ft_strjoin(total, buffer);
-            else
-                total = ft_strdup(buffer);
-            if (x < BUFFER_SIZE || ft_strchr(total, '\n'))
-                break;
-        }
-    }
-    if (!total || ft_strlen(total) == 0)
-        return (0);
-    if (line_length(total) < (int)ft_strlen(total))
-        rem = save_rem(total);
-    *line = malloc(sizeof(char) * line_length(total));
-    ft_strlcpy(*line, total, line_length(total));
-    free(total);
-    return (1);
+	int i;
+
+	i = 0;
+	while (line[i] && line[i] != '\n')
+		i++;
+	return (i + 1);
 }
 
-/*
-int main(void)
+int		get_next_line(int fd, char **line)
 {
-    int x = 1;
-    char *line;
+	ssize_t		r;
+	char		buffer[BUFFER_SIZE + 1];
+	char		*total;
+	static char *rem[256];
 
-    while (x)
-    {
-        get_next_line(0, &line);
-        printf("yolo: %s\n", line);
-    }
-}*/
+	if (BUFFER_SIZE == 0 || fd < 0 || !line)
+		return (-1);
+	total = NULL;
+	if (rem[fd])
+	{
+		total = ft_strdup(rem[fd]);
+		free(rem[fd]);
+		rem[fd] = NULL;
+	}
+	if (!total || !ft_strchr(total, '\n'))
+	{
+		r = 1;
+		while ((r = read(fd, buffer, BUFFER_SIZE)) > 0)
+		{
+			buffer[r] = '\0';
+			if (total)
+				total = ft_strjoin(total, buffer);
+			else
+				total = ft_strdup(buffer);
+			if (r < BUFFER_SIZE || ft_strchr(total, '\n'))
+				break ;
+		}
+	}
+	if (!total || ft_strlen(total) == 0)
+		return (0);
+	if (line_length(total) < (int)ft_strlen(total))
+		rem[fd] = save_rem(total);
+	*line = malloc(sizeof(char) * line_length(total));
+	ft_strlcpy(*line, total, line_length(total));
+	free(total);
+	return (1);
+}

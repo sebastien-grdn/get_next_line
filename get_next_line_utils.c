@@ -1,36 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line utils.c                              :+:      :+:    :+:   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sgrondin <sgrondin@student.42.fr>          +#+  +:+       +#+        */
+/*   By: sg9031 <sg9031@gmail.com>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/14 14:15:27 by sgrondin          #+#    #+#             */
-/*   Updated: 2021/01/14 17:38:58 by sgrondin         ###   ########.fr       */
+/*   Created: 2021/01/17 23:54:52 by sg9031            #+#    #+#             */
+/*   Updated: 2021/01/17 23:55:39 by sg9031           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-char	*ft_strjoin(char const *s1, char const *s2)
-{
-	int		total_size;
-	char	*new_string;
-	int		i;
-
-	if (!s1 || !s2)
-		return (NULL);
-	total_size = ft_strlen(s1) + ft_strlen(s2);
-	if (!(new_string = malloc(total_size + 1)))
-		return (NULL);
-	i = 0;
-	while (*s1)
-		new_string[i++] = *s1++;
-	while (*s2)
-		new_string[i++] = *s2++;
-	new_string[i] = '\0';
-	return (new_string);
-}
 
 size_t	ft_strlen(const char *str)
 {
