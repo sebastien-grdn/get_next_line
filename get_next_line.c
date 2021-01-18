@@ -6,7 +6,7 @@
 /*   By: sg9031 <sg9031@gmail.com>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 14:15:27 by sgrondin          #+#    #+#             */
-/*   Updated: 2021/01/18 01:18:59 by sg9031           ###   ########.fr       */
+/*   Updated: 2021/01/18 11:02:03 by sg9031           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,37 +59,44 @@ int		line_length(char *line)
 	return (i + 1);
 }
 
-int		get_next_line(int fd, char **line)
+int		read_file(int fd, char *total[], char *buffer)
 {
 	ssize_t		r;
+
+	if (!*total || !ft_strchr(*total, '\n'))
+	{
+		r = 1;
+		while ((r = read(fd, buffer, BUFFER_SIZE)) > 0)
+		{
+			buffer[r] = '\0';
+			if (*total)
+				*total = ft_strjoin(*total, buffer);
+			else
+				*total = ft_strdup(buffer);
+			if (r < BUFFER_SIZE || ft_strchr(*total, '\n'))
+				break ;
+		}
+	}
+	if (r < 0)
+		return (-1);
+	return (0);
+}
+
+int		get_next_line(int fd, char **line)
+{
 	char		buffer[BUFFER_SIZE + 1];
 	char		*total;
 	static char *rem[256];
 
 	if (BUFFER_SIZE <= 0 || fd < 0 || !line)
 		return (-1);
-	total = NULL;
 	if (rem[fd])
 	{
 		total = ft_strdup(rem[fd]);
 		free(rem[fd]);
 		rem[fd] = NULL;
 	}
-	if (!total || !ft_strchr(total, '\n'))
-	{
-		r = 1;
-		while ((r = read(fd, buffer, BUFFER_SIZE)) > 0)
-		{
-			buffer[r] = '\0';
-			if (total)
-				total = ft_strjoin(total, buffer);
-			else
-				total = ft_strdup(buffer);
-			if (r < BUFFER_SIZE || ft_strchr(total, '\n'))
-				break ;
-		}
-	}
-	if (r < 0)
+	if (read_file(fd, &total, buffer) < 0)
 		return (-1);
 	if (!total || ft_strlen(total) == 0)
 	{
