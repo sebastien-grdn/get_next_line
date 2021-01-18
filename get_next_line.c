@@ -6,7 +6,7 @@
 /*   By: sg9031 <sg9031@gmail.com>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 14:15:27 by sgrondin          #+#    #+#             */
-/*   Updated: 2021/01/18 13:16:46 by sg9031           ###   ########.fr       */
+/*   Updated: 2021/01/18 13:53:40 by sg9031           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,10 @@ int		line_length(char *line)
 	return (i + 1);
 }
 
-int		read_file(int fd, char *total[], char *buffer)
+int		read_file(int fd, char *total[])
 {
 	ssize_t		r;
+	char		buffer[BUFFER_SIZE + 1];
 
 	r = 0;
 	if (!*total || !ft_strchr(*total, '\n'))
@@ -84,10 +85,10 @@ int		read_file(int fd, char *total[], char *buffer)
 
 int		get_next_line(int fd, char **line)
 {
-	char		buffer[BUFFER_SIZE + 1];
 	char		*total;
 	static char *rem[256];
 
+	total = NULL;
 	if (BUFFER_SIZE <= 0 || fd < 0 || !line)
 		return (-1);
 	if (rem[fd])
@@ -96,7 +97,7 @@ int		get_next_line(int fd, char **line)
 		free(rem[fd]);
 		rem[fd] = NULL;
 	}
-	if (read_file(fd, &total, buffer) < 0)
+	if (read_file(fd, &total) < 0)
 		return (-1);
 	if (!total || ft_strlen(total) == 0)
 	{
