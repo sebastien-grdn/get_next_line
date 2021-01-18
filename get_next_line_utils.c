@@ -6,7 +6,7 @@
 /*   By: sg9031 <sg9031@gmail.com>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/17 23:54:52 by sg9031            #+#    #+#             */
-/*   Updated: 2021/01/17 23:55:39 by sg9031           ###   ########.fr       */
+/*   Updated: 2021/01/18 15:22:09 by sg9031           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,13 @@ char	*ft_strchr(const char *s, int c)
 
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 {
-	size_t srcsize;
+	size_t	srcsize;
 
 	if (!dst || !src)
 		return (0);
-	srcsize = ft_strlen(src);
+	srcsize = 0;
+	while (src[srcsize])
+		srcsize++;
 	if (dstsize > srcsize + 1)
 		ft_memcpy(dst, src, srcsize + 1);
 	else if (dstsize != 0)

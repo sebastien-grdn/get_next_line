@@ -6,7 +6,7 @@
 /*   By: sg9031 <sg9031@gmail.com>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 14:15:27 by sgrondin          #+#    #+#             */
-/*   Updated: 2021/01/18 13:53:40 by sg9031           ###   ########.fr       */
+/*   Updated: 2021/01/18 15:29:08 by sg9031           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,17 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	int		total_size;
 	char	*new_string;
 	int		i;
+	int		x;
 
 	if (!s1 || !s2)
 		return (NULL);
-	total_size = ft_strlen(s1) + ft_strlen(s2);
+	total_size = 0;
+	while (s1[total_size])
+		total_size++;
+	x = 0;
+	while (s2[x])
+		x++;
+	total_size += x;
 	if (!(new_string = malloc(total_size + 1)))
 		return (NULL);
 	i = 0;
@@ -32,22 +39,6 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (new_string);
 }
 
-char	*save_rem(char *total)
-{
-	int i;
-	int start;
-
-	i = 0;
-	while (total[i] && total[i] != '\n')
-		i++;
-	start = i;
-	while (total[i])
-		i++;
-	if (i != start)
-		return (ft_strdup(&total[start + 1]));
-	return (NULL);
-}
-
 int		line_length(char *line)
 {
 	int i;
@@ -57,6 +48,34 @@ int		line_length(char *line)
 		i++;
 	return (i + 1);
 }
+
+
+int	save_rem(char total[], char **rem)
+{
+	int i;
+	int start;
+	int len;
+
+	len = 0;
+	while (total[len])
+		len++;
+	if (line_length(total) < len)
+	{
+		i = 0;
+		while (total[i] && total[i] != '\n')
+			i++;
+		start = i;
+		while (total[i])
+			i++;
+		if (i != start)
+		{
+			if(!(*rem = ft_strdup(&total[start + 1])))
+				return (0);
+		}
+	}
+	return (1);
+}
+
 
 int		read_file(int fd, char *total[])
 {
@@ -93,7 +112,8 @@ int		get_next_line(int fd, char **line)
 		return (-1);
 	if (rem[fd])
 	{
-		total = ft_strdup(rem[fd]);
+		if(!(total = ft_strdup(rem[fd])))
+			return (-1);
 		free(rem[fd]);
 		rem[fd] = NULL;
 	}
@@ -104,9 +124,10 @@ int		get_next_line(int fd, char **line)
 		*line = ft_strdup("\0");
 		return (0);
 	}
-	if (line_length(total) < (int)ft_strlen(total))
-		rem[fd] = save_rem(total);
-	*line = malloc(sizeof(char) * line_length(total));
+	if (!save_rem(total, &rem[fd]))
+		return (-1);
+	if (!(*line = malloc(sizeof(char) * line_length(total))))
+		return (-1);
 	ft_strlcpy(*line, total, line_length(total));
 	free(total);
 	return (1);
