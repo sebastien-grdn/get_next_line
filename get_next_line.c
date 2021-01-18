@@ -6,7 +6,7 @@
 /*   By: sg9031 <sg9031@gmail.com>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 14:15:27 by sgrondin          #+#    #+#             */
-/*   Updated: 2021/01/17 23:58:35 by sg9031           ###   ########.fr       */
+/*   Updated: 2021/01/18 01:18:59 by sg9031           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int		get_next_line(int fd, char **line)
 	char		*total;
 	static char *rem[256];
 
-	if (BUFFER_SIZE == 0 || fd < 0 || !line)
+	if (BUFFER_SIZE <= 0 || fd < 0 || !line)
 		return (-1);
 	total = NULL;
 	if (rem[fd])
@@ -89,8 +89,13 @@ int		get_next_line(int fd, char **line)
 				break ;
 		}
 	}
+	if (r < 0)
+		return (-1);
 	if (!total || ft_strlen(total) == 0)
+	{
+		*line = ft_strdup("\0");
 		return (0);
+	}
 	if (line_length(total) < (int)ft_strlen(total))
 		rem[fd] = save_rem(total);
 	*line = malloc(sizeof(char) * line_length(total));
