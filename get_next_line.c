@@ -6,7 +6,7 @@
 /*   By: sg9031 <sg9031@gmail.com>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 14:15:27 by sgrondin          #+#    #+#             */
-/*   Updated: 2021/01/18 15:29:08 by sg9031           ###   ########.fr       */
+/*   Updated: 2021/01/18 16:16:00 by sg9031           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,18 +39,7 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	return (new_string);
 }
 
-int		line_length(char *line)
-{
-	int i;
-
-	i = 0;
-	while (line[i] && line[i] != '\n')
-		i++;
-	return (i + 1);
-}
-
-
-int	save_rem(char total[], char **rem)
+int		save_rem(char total[], char **rem)
 {
 	int i;
 	int start;
@@ -69,13 +58,12 @@ int	save_rem(char total[], char **rem)
 			i++;
 		if (i != start)
 		{
-			if(!(*rem = ft_strdup(&total[start + 1])))
+			if (!(*rem = ft_strdup(&total[start + 1])))
 				return (0);
 		}
 	}
 	return (1);
 }
-
 
 int		read_file(int fd, char *total[])
 {
@@ -102,6 +90,13 @@ int		read_file(int fd, char *total[])
 	return (0);
 }
 
+int		handle_no_line(char **line)
+{
+	if (!(*line = ft_strdup("\0")))
+		return (-1);
+	return (0);
+}
+
 int		get_next_line(int fd, char **line)
 {
 	char		*total;
@@ -112,18 +107,15 @@ int		get_next_line(int fd, char **line)
 		return (-1);
 	if (rem[fd])
 	{
-		if(!(total = ft_strdup(rem[fd])))
+		if (!(total = ft_strdup(rem[fd])))
 			return (-1);
 		free(rem[fd]);
 		rem[fd] = NULL;
 	}
 	if (read_file(fd, &total) < 0)
 		return (-1);
-	if (!total || ft_strlen(total) == 0)
-	{
-		*line = ft_strdup("\0");
-		return (0);
-	}
+	if (!total || line_length(total) == 0)
+		return (handle_no_line(line));
 	if (!save_rem(total, &rem[fd]))
 		return (-1);
 	if (!(*line = malloc(sizeof(char) * line_length(total))))

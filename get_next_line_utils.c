@@ -6,20 +6,20 @@
 /*   By: sg9031 <sg9031@gmail.com>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/17 23:54:52 by sg9031            #+#    #+#             */
-/*   Updated: 2021/01/18 15:22:09 by sg9031           ###   ########.fr       */
+/*   Updated: 2021/01/18 15:39:15 by sg9031           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *str)
+int		line_length(char *line)
 {
-	size_t	i;
+	int i;
 
 	i = 0;
-	while (str[i] != '\0')
+	while (line[i] && line[i] != '\n')
 		i++;
-	return (i);
+	return (i + 1);
 }
 
 char	*ft_strdup(const char *src)

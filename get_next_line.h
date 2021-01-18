@@ -6,7 +6,7 @@
 /*   By: sg9031 <sg9031@gmail.com>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/14 14:36:14 by sgrondin          #+#    #+#             */
-/*   Updated: 2021/01/17 23:58:59 by sg9031           ###   ########.fr       */
+/*   Updated: 2021/01/18 15:39:28 by sg9031           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 
 int		get_next_line(int fd, char **line);
 char	*ft_strjoin(char const *s1, char const *s2);
-size_t	ft_strlen(const char *str);
+int		line_length(char *line);
 char	*ft_strdup(const char *src);
 char	*ft_strchr(const char *s, int c);
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
