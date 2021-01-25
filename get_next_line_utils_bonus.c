@@ -1,25 +1,46 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_utils_bonus.c                        :+:      :+:    :+:   */
+/*   get_next_line_bonus_utils.c                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: sg9031 <sg9031@gmail.com>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/01/17 23:54:52 by sg9031            #+#    #+#             */
-/*   Updated: 2021/01/19 18:14:09 by sg9031           ###   ########.fr       */
+/*   Created: 2021/01/25 01:09:36 by sg9031            #+#    #+#             */
+/*   Updated: 2021/01/25 15:35:51 by sg9031           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line_bonus.h"
 
-int		line_length(char *line)
+
+char	*ft_strchr(const char *s, int c)
 {
 	int i;
 
 	i = 0;
-	while (line[i] && line[i] != '\n')
+	while (s[i])
+	{
+		if (s[i] == c)
+			return (char*)&s[i];
 		i++;
-	return (i + 1);
+	}
+	if (s[i] == '\0' && c == '\0')
+		return (char*)&s[i];
+	return (0);
+}
+
+int		line_length(char *line, int entire)
+{
+	int i;
+
+	i = 0;
+	if (entire)
+		while (line[i])
+			i++;
+	else
+		while (line[i] && line[i] != '\n')
+			i++;
+	return (i);
 }
 
 char	*ft_strdup(const char *src)
@@ -41,57 +62,4 @@ char	*ft_strdup(const char *src)
 	}
 	copy[i] = '\0';
 	return (copy);
-}
-
-char	*ft_strchr(const char *s, int c)
-{
-	int i;
-
-	i = 0;
-	while (s[i])
-	{
-		if (s[i] == c)
-			return (char*)&s[i];
-		i++;
-	}
-	if (s[i] == '\0' && c == '\0')
-		return (char*)&s[i];
-	return (0);
-}
-
-size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
-{
-	size_t	srcsize;
-
-	if (!dst || !src)
-		return (0);
-	srcsize = 0;
-	while (src[srcsize])
-		srcsize++;
-	if (dstsize > srcsize + 1)
-		ft_memcpy(dst, src, srcsize + 1);
-	else if (dstsize != 0)
-	{
-		ft_memcpy(dst, src, dstsize - 1);
-		dst[dstsize - 1] = '\0';
-	}
-	return (srcsize);
-}
-
-void	*ft_memcpy(void *dst, const void *src, size_t n)
-{
-	size_t	i;
-	char	*x;
-	char	*y;
-
-	if (!dst && !src)
-		return (dst);
-	x = (char *)src;
-	y = (char *)dst;
-	i = -1;
-	while (++i < n)
-	{
-		y[i] = x[i];
-	}
-	return (dst);
 }
