@@ -6,51 +6,45 @@
 /*   By: sg9031 <sg9031@gmail.com>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 01:12:19 by sg9031            #+#    #+#             */
-/*   Updated: 2021/01/26 16:47:32 by sg9031           ###   ########.fr       */
+/*   Updated: 2021/01/26 17:43:37 by sg9031           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-
-int load_from_memory(char **memory, char **line)
+int		load_from_memory(char **memory, char **line)
 {
-	int len;
-	char *tmp;
-	int i;
+	int		len;
+	char	*tmp;
+	int		i;
 
-	if (*memory)
-	{
-		if(!(tmp = ft_strdup(*memory)))
+	if (!*memory)
+		return (1);
+	if (!(tmp = ft_strdup(*memory)))
+		return (0);
+	free(*memory);
+	*memory = NULL;
+	len = line_length(tmp, 0);
+	if (!(*line = malloc(sizeof(char) * (len + 2))))
+		return (0);
+	i = -1;
+	while (++i < len)
+		(*line)[i] = tmp[i];
+	(*line)[i] = '\0';
+	if (ft_strchr(tmp, '\n'))
+		if (!(*memory = ft_strdup(ft_strchr(tmp, '\n') + 1)))
 			return (0);
-		free(*memory);
-		*memory = NULL;
-		len = line_length(tmp, 0);
-		if(!(*line = malloc(sizeof(char) * (len + 2))))
-			return (0);
-		i = -1;
-		while (++i < len)
-			(*line)[i] = tmp[i];
-		(*line)[i] = '\0';
-		if (ft_strchr(tmp, '\n'))
-			if(!(*memory = ft_strdup(ft_strchr(tmp, '\n') + 1)))
-				return (0);
-		if (len != line_length(tmp, 1))
-		{
-			free(tmp);
-			return (2);
-		}
-		free(tmp);
-	}
-	return (1);
+	i = (len != line_length(tmp, 1));
+	free(tmp);
+	return (1 + i);
 }
 
-int complete_line(char **line, char *buffer)
+int		complete_line(char **line, char *buffer)
 {
-	char *tmp;
-	int	i;
-	int current_line_length;
-	int buffer_line_length;
+	char	*tmp;
+	int		i;
+	int		current_line_length;
+	int		buffer_line_length;
 
 	if (*line)
 	{
@@ -63,7 +57,7 @@ int complete_line(char **line, char *buffer)
 		return (0);
 	current_line_length = line_length(tmp, 1);
 	buffer_line_length = line_length(buffer, 0);
-	if(!(*line = malloc(sizeof(char) * (current_line_length + buffer_line_length + 1))))
+	if (!(*line = malloc(sizeof(char) * (current_line_length + buffer_line_length + 1))))
 		return (0);
 	i = -1;
 	while (++i < current_line_length)
@@ -76,7 +70,7 @@ int complete_line(char **line, char *buffer)
 	return (1);
 }
 
-int read_from_fd(int fd, char **line, char **memory)
+int		read_from_fd(int fd, char **line, char **memory)
 {
 	ssize_t		r;
 	char		buffer[BUFFER_SIZE + 1];
@@ -90,7 +84,7 @@ int read_from_fd(int fd, char **line, char **memory)
 			if (!(complete_line(line, buffer)))
 				return (0);
 			if (ft_strchr(buffer, '\n'))
-				break;
+				break ;
 		}
 		if (r < 0)
 			return (0);
@@ -103,11 +97,10 @@ int read_from_fd(int fd, char **line, char **memory)
 	return (1);
 }
 
-
-int get_next_line(int fd, char **line)
+int		get_next_line(int fd, char **line)
 {
-	static char *memory[256];
-	int 		code;
+	static char	*memory[256];
+	int			code;
 
 	if (BUFFER_SIZE <= 0 || fd < 0 || !line)
 		return (-1);
