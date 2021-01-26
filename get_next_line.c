@@ -6,7 +6,7 @@
 /*   By: sg9031 <sg9031@gmail.com>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 01:12:19 by sg9031            #+#    #+#             */
-/*   Updated: 2021/01/25 17:14:50 by sg9031           ###   ########.fr       */
+/*   Updated: 2021/01/26 16:43:35 by sg9031           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ int complete_line(char **line, char *buffer)
 	}
 	else
 		tmp = ft_strdup("\0");
+	if (!tmp)
+		return (0);
 	current_line_length = line_length(tmp, 1);
 	buffer_line_length = line_length(buffer, 0);
 	if(!(*line = malloc(sizeof(char) * (current_line_length + buffer_line_length + 1))))
@@ -123,4 +125,32 @@ int get_next_line(int fd, char **line)
 		return (0);
 	}
 	return (1);
+}
+
+int	main(int ac, char **av) {
+	int		fd = -1;
+	char	*line =	NULL;
+	int		ret;
+
+	/* open file - if an error occurs here, the test will be ignored, that's not your fault ! */
+	if ((fd = open(av[1], O_RDONLY)) == -1 || read(fd, NULL, 0) == -1) {
+		printf("ERROR");
+		return (0);
+	}
+
+	ret = 1;
+	while (ret == 1)
+	{
+		ret = get_next_line(fd, &line);
+		printf("%s", line);
+		printf(" | %d\n", ret);
+	}
+
+	/* cleaning up */
+	free(line);
+	line = NULL;
+	close(fd);
+
+	printf("SUCCESS");
+	return (0);
 }

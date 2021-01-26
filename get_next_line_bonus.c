@@ -6,7 +6,7 @@
 /*   By: sg9031 <sg9031@gmail.com>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 01:12:19 by sg9031            #+#    #+#             */
-/*   Updated: 2021/01/25 17:16:19 by sg9031           ###   ########.fr       */
+/*   Updated: 2021/01/26 16:44:15 by sg9031           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ int complete_line(char **line, char *buffer)
 	}
 	else
 		tmp = ft_strdup("\0");
+	if (!tmp)
+		return (0);
 	current_line_length = line_length(tmp, 1);
 	buffer_line_length = line_length(buffer, 0);
 	if(!(*line = malloc(sizeof(char) * (current_line_length + buffer_line_length + 1))))
