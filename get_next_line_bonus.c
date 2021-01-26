@@ -6,7 +6,7 @@
 /*   By: sg9031 <sg9031@gmail.com>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 01:12:19 by sg9031            #+#    #+#             */
-/*   Updated: 2021/01/26 17:42:37 by sg9031           ###   ########.fr       */
+/*   Updated: 2021/01/26 17:45:31 by sg9031           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int		load_from_memory(char **memory, char **line)
 
 int		create_tmp(char **line, char **tmp)
 {
-	if (**line)
+	if (*line)
 	{
 		*tmp = ft_strdup(*line);
 		free(*line);

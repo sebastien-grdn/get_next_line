@@ -6,7 +6,7 @@
 /*   By: sg9031 <sg9031@gmail.com>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/25 01:12:19 by sg9031            #+#    #+#             */
-/*   Updated: 2021/01/26 17:43:37 by sg9031           ###   ########.fr       */
+/*   Updated: 2021/01/26 17:52:08 by sg9031           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,20 @@ int		load_from_memory(char **memory, char **line)
 	return (1 + i);
 }
 
+int		create_tmp(char **line, char **tmp)
+{
+	if (*line)
+	{
+		*tmp = ft_strdup(*line);
+		free(*line);
+	}
+	else
+		*tmp = ft_strdup("\0");
+	if (!*tmp)
+		return (0);
+	return (1);
+}
+
 int		complete_line(char **line, char *buffer)
 {
 	char	*tmp;
@@ -46,18 +60,12 @@ int		complete_line(char **line, char *buffer)
 	int		current_line_length;
 	int		buffer_line_length;
 
-	if (*line)
-	{
-		tmp = ft_strdup(*line);
-		free(*line);
-	}
-	else
-		tmp = ft_strdup("\0");
-	if (!tmp)
+	if (!(create_tmp(line, &tmp)))
 		return (0);
 	current_line_length = line_length(tmp, 1);
 	buffer_line_length = line_length(buffer, 0);
-	if (!(*line = malloc(sizeof(char) * (current_line_length + buffer_line_length + 1))))
+	if (!(*line = malloc(sizeof(char) * \
+		(current_line_length + buffer_line_length + 1))))
 		return (0);
 	i = -1;
 	while (++i < current_line_length)
